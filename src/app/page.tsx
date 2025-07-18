@@ -41,6 +41,8 @@ const App = () => {
         title: "全栈开发工程师",
         subtitle: "代码 // 创造 // 创新",
         email: "neo@matrix.com",
+        github: "https://github.com/yourusername",
+        linkedin: "https://linkedin.com/in/yourusername",
         location: "数字世界 • 矩阵城市",
         description: "我是一个热衷于构建未来的开发者，专注于前沿技术和创新解决方案。在代码的世界里创造无限可能。"
       },
@@ -187,6 +189,8 @@ const App = () => {
         title: "Full Stack Developer",
         subtitle: "Code // Create // Innovate",
         email: "neo@matrix.com",
+        github: "https://github.com/yourusername",
+        linkedin: "https://linkedin.com/in/yourusername",
         location: "Digital World • Matrix City",
         description: "I am a developer passionate about building the future, focusing on cutting-edge technologies and innovative solutions. Creating unlimited possibilities in the world of code."
       },
