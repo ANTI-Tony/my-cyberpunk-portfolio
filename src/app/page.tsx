@@ -7,7 +7,7 @@ const App = () => {
   const [currentPage, setCurrentPage] = useState('home');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [language, setLanguage] = useState('zh'); // 'zh' for Chinese, 'en' for English
+  const [language, setLanguage] = useState<'zh' | 'en'>('zh'); // 'zh' for Chinese, 'en' for English
 
   const navigateTo = (page: string) => {
     if (page === currentPage) return;
@@ -37,11 +37,11 @@ const App = () => {
       },
       // 个人信息
       personal: {
-        name: "Jingbo(Tony) Wen",
+        name: "Neo Anderson",
         title: "全栈开发工程师",
         subtitle: "代码 // 创造 // 创新",
-        email: "ts2015656@gmail.com",
-        location: "悉尼",
+        email: "neo@matrix.com",
+        location: "数字世界 • 矩阵城市",
         description: "我是一个热衷于构建未来的开发者，专注于前沿技术和创新解决方案。在代码的世界里创造无限可能。"
       },
       // 首页
@@ -581,7 +581,7 @@ const App = () => {
             <div style={{ position: 'relative', display: 'inline-block' }}>
               <div style={styles.glowingAvatar}>
                 <img
-                  src="/images/tony.jpg"
+                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face"
                   alt="Profile"
                   style={{
                     width: '128px',
