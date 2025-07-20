@@ -3,13 +3,33 @@
 import React, { useState } from 'react';
 import { Github, Linkedin, Mail, ExternalLink, Calendar, MapPin, Code, Briefcase, GraduationCap, User, Menu, X, ChevronRight, Terminal, Zap, Globe, Database, Server, Languages } from 'lucide-react';
 
+// 定义类型接口
+interface Experience {
+  title: string;
+  company: string;
+  period: string;
+  description: string;
+  skills: string[];
+  achievements: string[];
+}
+
+interface Project {
+  title: string;
+  description: string;
+  tech: string[];
+  status: 'completed' | 'in-progress' | 'concept';
+}
+
+type Language = 'zh' | 'en';
+type PageType = 'home' | 'about' | 'experience' | 'projects' | 'contact';
+
 const App = () => {
-  const [currentPage, setCurrentPage] = useState('home');
+  const [currentPage, setCurrentPage] = useState<PageType>('home');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [language, setLanguage] = useState<'zh' | 'en'>('zh'); // 'zh' for Chinese, 'en' for English
+  const [language, setLanguage] = useState<Language>('zh');
 
-  const navigateTo = (page: string) => {
+  const navigateTo = (page: PageType) => {
     if (page === currentPage) return;
     
     setIsLoading(true);
@@ -37,14 +57,12 @@ const App = () => {
       },
       // 个人信息
       personal: {
-        name: "Neo Anderson",
-        title: "全栈开发工程师",
-        subtitle: "代码 // 创造 // 创新",
-        email: "neo@matrix.com",
-        github: "https://github.com/yourusername",
-        linkedin: "https://linkedin.com/in/yourusername",
-        location: "数字世界 • 矩阵城市",
-        description: "我是一个热衷于构建未来的开发者，专注于前沿技术和创新解决方案。在代码的世界里创造无限可能。"
+        name: "Tony Wen",
+        title: "移动应用开发工程师",
+        subtitle: "移动开发 // 全栈 // 创新",
+        email: "ts2015656@gmail.com",
+        location: "悉尼，澳大利亚",
+        description: "我是一名专注于移动应用开发的软件工程师，擅长跨平台应用开发和后端系统设计。目前在悉尼大学攻读软件工程荣誉学位，具有丰富的实习和项目经验。"
       },
       // 首页
       home: {
@@ -63,9 +81,9 @@ const App = () => {
         status: "状态:",
         specialty: "专长:",
         openToWork: "开放工作机会",
-        fullstackDev: "全栈开发 & 系统设计",
-        intro1: "我是一名全栈开发工程师，热衷于探索技术的边界。从前端的用户体验到后端的系统架构，我致力于创造既美观又实用的数字解决方案。",
-        intro2: "在代码的世界里，我不断学习新的技术栈，追求代码的艺术性和效率。我相信技术能够改变世界，而我们是这个变化的推动者。"
+        fullstackDev: "移动应用开发 & 全栈系统设计",
+        intro1: "我是一名专注于移动应用开发的软件工程师，目前在悉尼大学攻读软件工程荣誉学位。从跨平台移动应用到后端系统架构，我致力于创造高效、用户友好的数字解决方案。",
+        intro2: "在实习和项目经历中，我积累了丰富的React Native、Spring Boot和云服务开发经验。我热衷于学习新技术，追求代码的优雅和性能的极致，相信技术能够改善人们的生活。"
       },
       // 经历页面
       experience: {
@@ -75,36 +93,44 @@ const App = () => {
         achievements: "主要成就",
         experiences: [
           {
-            title: '高级全栈工程师',
-            company: 'TechCorp Inc.',
-            period: '2022 - 至今',
-            description: '负责核心产品的架构设计与开发，带领团队完成多个重要项目，提升系统性能50%。',
-            skills: ['React', 'Node.js', 'AWS', 'TypeScript', 'MongoDB'],
-            achievements: ['领导5人开发团队', '优化系统性能50%', '设计微服务架构']
+            title: '移动应用开发工程师',
+            company: 'Art Flâneur',
+            period: '2025.03 - 至今',
+            description: '负责跨平台白标地图应用MVP的开发，使用React Native和MapLibre GL集成。领导团队实现了实时地理跟踪功能，并优化了iOS和Android的电池使用效率。',
+            skills: ['React Native', 'MapLibre GL', 'GraphQL', 'Auth0', 'Radar SDK'],
+            achievements: ['实现<3秒启动时间', '优化地图渲染至30+ FPS', '构建白标定制系统']
           },
           {
-            title: '前端工程师',
-            company: 'StartupXYZ',
-            period: '2020 - 2022',
-            description: '从零开始构建公司产品的前端系统，建立开发规范和CI/CD流程。',
-            skills: ['Vue.js', 'JavaScript', 'Webpack', 'Jest'],
-            achievements: ['搭建前端基础架构', '建立代码规范', '实现自动化部署']
+            title: '软件开发实习生',
+            company: 'Challenz',
+            period: '2023.09 - 2024.02',
+            description: '参与移动应用开发，专注于后端功能和前端优化。设计Supabase数据库架构，提升查询性能40%，开发边缘函数减少服务器负载25%。',
+            skills: ['React Native', 'Supabase', 'Edge Functions', 'TypeScript'],
+            achievements: ['查询性能提升40%', '服务器负载减少25%', '启动时间优化20%']
           },
           {
-            title: '计算机科学学士',
-            company: '某某大学',
-            period: '2016 - 2020',
-            description: '专业成绩优异，参与多个开源项目，获得校级编程竞赛一等奖。',
-            skills: ['算法与数据结构', 'Java', 'Python', '机器学习'],
-            achievements: ['GPA 3.8/4.0', '编程竞赛一等奖', '开源贡献者']
+            title: '研究实习生',
+            company: 'Xinsong Robot Automation Co., Ltd',
+            period: '2023.12 - 2024.02',
+            description: '专注于工业机器人的计算机视觉和自主导航研究。开发了配备摄像头的机器人自主路径规划算法，导航精度提升85%。',
+            skills: ['计算机视觉', '机器人导航', 'Python', '算法优化'],
+            achievements: ['导航精度提升85%', '完成50+次实地测试', '测试时间减少15%']
+          },
+          {
+            title: '软件工程荣誉学士',
+            company: '悉尼大学',
+            period: '2023.03 - 至今',
+            description: '主修软件工程，获得多项认证包括Google AI Essentials、Google IT Support等。积极参与hackathon竞赛，在2024 SYNCS Hackathon中获得前5名。',
+            skills: ['软件工程', 'AI/ML', '系统设计', '敏捷开发'],
+            achievements: ['荣誉学位在读', 'Hackathon前5名', '多项Google认证']
           }
-        ]
+        ] as Experience[]
       },
       // 项目页面
       projects: {
         title: "我的",
         projects: "项目",
-        subtitle: "探索我创建的一些项目，从AI应用到区块链解决方案，每个项目都是技术创新的体现。",
+        subtitle: "探索我开发的移动应用和全栈项目，从健身追踪App到实时聊天平台，每个项目都体现了我在技术上的成长和创新。",
         techStack: "技术栈",
         code: "代码",
         demo: "演示",
@@ -113,30 +139,30 @@ const App = () => {
         concept: "概念阶段",
         projectList: [
           {
-            title: 'AI驱动的任务管理系统',
-            description: '基于机器学习的智能任务分配和优先级排序系统，提高团队效率40%。使用先进的NLP技术理解任务描述，自动分类和优先级评估。',
-            tech: ['React', 'Python', 'TensorFlow', 'MongoDB', 'AWS'],
+            title: 'Smart Fitness Assistant',
+            description: '使用React Native和Spring Boot开发的全栈健身追踪移动应用。实现了锻炼跟踪、饮食监控和个性化健身目标功能。构建RESTful API支持用户管理、锻炼/饮食记录和统计分析，采用JWT认证和基于角色的访问控制。',
+            tech: ['React Native', 'TypeScript', 'Spring Boot', 'PostgreSQL', 'AWS', 'Docker'],
             status: 'completed'
           },
           {
-            title: '区块链投票系统', 
-            description: '去中心化的透明投票平台，确保选举过程的公正性和不可篡改性。采用零知识证明保护选民隐私，同时保证投票结果的可验证性。',
-            tech: ['Solidity', 'Web3.js', 'React', 'Ethereum', 'IPFS'],
+            title: 'Brief Notes - 个人理财iOS应用',
+            description: '使用SwiftUI和Core Data开发的双语支出跟踪iOS应用。实现自动交易记录功能，可解析微信支付和Apple Pay的短信通知。集成SwiftUI Charts进行交互式数据可视化，支持实时汇率转换和自定义快捷交易。',
+            tech: ['SwiftUI', 'Core Data', 'WidgetKit', 'Charts', 'NLP'],
             status: 'completed'
           },
           {
-            title: '实时协作代码编辑器',
-            description: '支持多人实时协作的在线代码编辑器，集成语法高亮、代码补全、实时预览等功能。支持多种编程语言和主题。',
-            tech: ['Next.js', 'Socket.io', 'Monaco Editor', 'Node.js', 'Redis'],
+            title: 'Chat Website (2024 SYNCS Hackathon)',
+            description: '在2024 SYNCS Hackathon中获得前5名的实时聊天平台。使用Flask后端和Jinja模板开发，实现安全的用户认证和MySQL数据库存储。集成基于OpenCV的视频聊天功能，采用Git进行敏捷开发团队协作。',
+            tech: ['Flask', 'Jinja', 'HTML/CSS/JavaScript', 'MySQL', 'OpenCV', 'Git'],
+            status: 'completed'
+          },
+          {
+            title: 'Art Flâneur 地图应用',
+            description: '正在开发的跨平台白标地图应用MVP，集成MapLibre GL和实时地理跟踪功能。实现了优化的电池使用、GraphQL查询的交互式地点详情、Auth0多种登录方式支持，以及使用Radar SDK的地理围栏系统。',
+            tech: ['React Native', 'MapLibre GL', 'GraphQL', 'Auth0', 'Radar SDK'],
             status: 'in-progress'
-          },
-          {
-            title: '量子加密通信平台',
-            description: '基于量子密钥分发的安全通信平台，为企业提供最高级别的数据保护。利用量子纠缠特性实现理论上不可破解的加密通信。',
-            tech: ['Python', 'Quantum Computing', 'Cryptography', 'FastAPI'],
-            status: 'concept'
           }
-        ]
+        ] as Project[]
       },
       // 联系页面
       contact: {
@@ -151,26 +177,26 @@ const App = () => {
         linkedin: "LinkedIn",
         viewMyCode: "查看我的代码",
         professionalProfile: "专业履历",
-        openToOpportunities: "开放新的工作机会",
-        remoteWork: "可接受远程合作",
-        techCommunication: "乐于技术交流",
+        openToOpportunities: "开放实习和工作机会",
+        remoteWork: "可接受远程工作",
+        techCommunication: "乐于技术交流和学习",
         projectCooperation: "项目合作",
-        projectCoopDesc: "全栈开发、系统架构设计、技术咨询等项目合作。",
+        projectCoopDesc: "移动应用开发、全栈开发、系统架构设计等项目合作机会。",
         techExchange: "技术交流",
-        techExchangeDesc: "开源项目讨论、技术分享、代码审查等技术交流活动。",
+        techExchangeDesc: "开源项目讨论、技术分享、代码审查、学习经验交流等活动。",
         careerOpportunities: "职业机会",
-        careerOpportunitiesDesc: "全职工作、远程工作、创业合伙等职业发展机会。",
+        careerOpportunitiesDesc: "实习机会、毕业生职位、远程工作、技术团队合作等职业发展机会。",
         contactNow: "立即联系",
         tags: {
-          remoteWork: "远程协作",
-          longTerm: "长期合作", 
+          remoteWork: "远程实习",
+          longTerm: "长期学习", 
           consulting: "技术指导",
           openSource: "开源贡献",
           sharing: "技术分享",
           codeReview: "代码审查",
-          fullTime: "全职机会",
+          fullTime: "实习机会",
           remote: "远程工作",
-          startup: "创业合伙"
+          startup: "创业团队"
         }
       }
     },
@@ -185,14 +211,12 @@ const App = () => {
       },
       // Personal Info
       personal: {
-        name: "Neo Anderson",
-        title: "Full Stack Developer",
-        subtitle: "Code // Create // Innovate",
-        email: "neo@matrix.com",
-        github: "https://github.com/yourusername",
-        linkedin: "https://linkedin.com/in/yourusername",
-        location: "Digital World • Matrix City",
-        description: "I am a developer passionate about building the future, focusing on cutting-edge technologies and innovative solutions. Creating unlimited possibilities in the world of code."
+        name: "Tony Wen",
+        title: "Mobile Application Developer",
+        subtitle: "Mobile Dev // Full Stack // Innovation",
+        email: "ts2015656@gmail.com",
+        location: "Sydney, Australia",
+        description: "I am a software engineer specializing in mobile application development, with expertise in cross-platform app development and backend system design. Currently pursuing Software Engineering Honours at University of Sydney with rich internship and project experience."
       },
       // Home Page
       home: {
@@ -211,9 +235,9 @@ const App = () => {
         status: "Status:",
         specialty: "Specialty:",
         openToWork: "Open to work opportunities",
-        fullstackDev: "Full Stack Development & System Design",
-        intro1: "I am a full-stack developer passionate about exploring the boundaries of technology. From frontend user experience to backend system architecture, I am committed to creating digital solutions that are both beautiful and practical.",
-        intro2: "In the world of code, I continuously learn new technology stacks, pursuing the artistry and efficiency of code. I believe technology can change the world, and we are the drivers of this change."
+        fullstackDev: "Mobile Application Development & Full Stack System Design",
+        intro1: "I am a software engineer specializing in mobile application development, currently pursuing Software Engineering Honours at University of Sydney. From cross-platform mobile applications to backend system architecture, I am committed to creating efficient and user-friendly digital solutions.",
+        intro2: "Through my internship and project experiences, I have accumulated rich experience in React Native, Spring Boot, and cloud service development. I am passionate about learning new technologies, pursuing code elegance and performance excellence, believing that technology can improve people's lives."
       },
       // Experience Page
       experience: {
@@ -223,36 +247,44 @@ const App = () => {
         achievements: "Key Achievements",
         experiences: [
           {
-            title: 'Senior Full Stack Engineer',
-            company: 'TechCorp Inc.',
-            period: '2022 - Present',
-            description: 'Responsible for core product architecture design and development, leading the team to complete multiple important projects, improving system performance by 50%.',
-            skills: ['React', 'Node.js', 'AWS', 'TypeScript', 'MongoDB'],
-            achievements: ['Led a 5-person development team', 'Optimized system performance by 50%', 'Designed microservices architecture']
+            title: 'Mobile Application Developer',
+            company: 'Art Flâneur',
+            period: '03.2025 - Present',
+            description: 'Led development of cross-platform white-label mapping application MVP using React Native with MapLibre GL integration. Implemented real-time geo-tracking functionality with optimized battery usage for iOS and Android.',
+            skills: ['React Native', 'MapLibre GL', 'GraphQL', 'Auth0', 'Radar SDK'],
+            achievements: ['Achieved <3s startup times', 'Optimized to 30+ FPS map rendering', 'Built white-label customization system']
           },
           {
-            title: 'Frontend Engineer',
-            company: 'StartupXYZ',
-            period: '2020 - 2022',
-            description: 'Built the company\'s frontend system from scratch, established development standards and CI/CD processes.',
-            skills: ['Vue.js', 'JavaScript', 'Webpack', 'Jest'],
-            achievements: ['Built frontend infrastructure', 'Established code standards', 'Implemented automated deployment']
+            title: 'Software Development Intern',
+            company: 'Challenz',
+            period: '09.2023 - 02.2024',
+            description: 'Contributed to mobile application development with focus on backend functionality and frontend optimization. Designed Supabase database architecture, improving query performance by 40%.',
+            skills: ['React Native', 'Supabase', 'Edge Functions', 'TypeScript'],
+            achievements: ['Improved query performance by 40%', 'Reduced server load by 25%', 'Optimized startup time by 20%']
           },
           {
-            title: 'Bachelor of Computer Science',
-            company: 'University ABC',
-            period: '2016 - 2020',
-            description: 'Excellent academic performance, participated in multiple open source projects, won first prize in university programming competition.',
-            skills: ['Data Structures & Algorithms', 'Java', 'Python', 'Machine Learning'],
-            achievements: ['GPA 3.8/4.0', 'Programming Competition First Prize', 'Open Source Contributor']
+            title: 'Research Intern',
+            company: 'Xinsong Robot Automation Co., Ltd',
+            period: '12.2023 - 02.2024',
+            description: 'Conducted research on industrial robotics focusing on computer vision and autonomous navigation. Developed autonomous pathfinding algorithm for camera-equipped robots.',
+            skills: ['Computer Vision', 'Robot Navigation', 'Python', 'Algorithm Optimization'],
+            achievements: ['85% improvement in navigation accuracy', '50+ field tests completed', '15% reduction in testing time']
+          },
+          {
+            title: 'Bachelor of Software Engineering (Honours)',
+            company: 'University of Sydney',
+            period: '03.2023 - Present',
+            description: 'Majoring in Software Engineering with multiple certifications including Google AI Essentials, Google IT Support. Active participant in hackathons, achieved Top 5 in 2024 SYNCS Hackathon.',
+            skills: ['Software Engineering', 'AI/ML', 'System Design', 'Agile Development'],
+            achievements: ['Honours Degree in Progress', 'Top 5 Hackathon Finalist', 'Multiple Google Certifications']
           }
-        ]
+        ] as Experience[]
       },
       // Projects Page
       projects: {
         title: "My",
         projects: "Projects",
-        subtitle: "Explore some of my projects, from AI applications to blockchain solutions, each project represents technological innovation.",
+        subtitle: "Explore my mobile applications and full-stack projects, from fitness tracking apps to real-time chat platforms, each project reflects my technical growth and innovation.",
         techStack: "Tech Stack",
         code: "Code",
         demo: "Demo", 
@@ -261,30 +293,30 @@ const App = () => {
         concept: "Concept",
         projectList: [
           {
-            title: 'AI-Driven Task Management System',
-            description: 'Intelligent task allocation and priority sorting system based on machine learning, improving team efficiency by 40%. Uses advanced NLP technology to understand task descriptions and automatically classify and evaluate priorities.',
-            tech: ['React', 'Python', 'TensorFlow', 'MongoDB', 'AWS'],
+            title: 'Smart Fitness Assistant',
+            description: 'Comprehensive fitness tracking mobile app developed using React Native and Spring Boot. Implemented core features including workout tracking, diet monitoring, and personalized fitness goals. Built RESTful APIs with JWT-based authentication and role-based access control.',
+            tech: ['React Native', 'TypeScript', 'Spring Boot', 'PostgreSQL', 'AWS', 'Docker'],
             status: 'completed'
           },
           {
-            title: 'Blockchain Voting System',
-            description: 'Decentralized transparent voting platform ensuring fairness and immutability of the election process. Uses zero-knowledge proofs to protect voter privacy while ensuring verifiable voting results.',
-            tech: ['Solidity', 'Web3.js', 'React', 'Ethereum', 'IPFS'],
+            title: 'Brief Notes - Personal Finance iOS App',
+            description: 'Bilingual expense tracking iOS app using SwiftUI and Core Data. Built automatic transaction recording feature that parses SMS notifications from WeChat Pay and Apple Pay. Created interactive data visualization with SwiftUI Charts for expense analysis.',
+            tech: ['SwiftUI', 'Core Data', 'WidgetKit', 'Charts', 'NLP'],
             status: 'completed'
           },
           {
-            title: 'Real-time Collaborative Code Editor',
-            description: 'Online code editor supporting multi-user real-time collaboration, integrating syntax highlighting, code completion, real-time preview and other features. Supports multiple programming languages and themes.',
-            tech: ['Next.js', 'Socket.io', 'Monaco Editor', 'Node.js', 'Redis'],
+            title: 'Chat Website (2024 SYNCS Hackathon)',
+            description: 'Top 5 finalist real-time chat platform developed using Flask backend and Jinja templating. Implemented secure user authentication and database storage using MySQL. Integrated video chat functionality using Python OpenCV library.',
+            tech: ['Flask', 'Jinja', 'HTML/CSS/JavaScript', 'MySQL', 'OpenCV', 'Git'],
+            status: 'completed'
+          },
+          {
+            title: 'Art Flâneur Mapping Application',
+            description: 'Cross-platform white-label mapping application MVP with MapLibre GL integration and real-time geo-tracking functionality. Features optimized battery usage, interactive place details via GraphQL queries, and Auth0 authentication system.',
+            tech: ['React Native', 'MapLibre GL', 'GraphQL', 'Auth0', 'Radar SDK'],
             status: 'in-progress'
-          },
-          {
-            title: 'Quantum Encryption Communication Platform',
-            description: 'Secure communication platform based on quantum key distribution, providing the highest level of data protection for enterprises. Uses quantum entanglement properties to achieve theoretically unbreakable encrypted communication.',
-            tech: ['Python', 'Quantum Computing', 'Cryptography', 'FastAPI'],
-            status: 'concept'
           }
-        ]
+        ] as Project[]
       },
       // Contact Page
       contact: {
@@ -299,26 +331,26 @@ const App = () => {
         linkedin: "LinkedIn",
         viewMyCode: "View my code",
         professionalProfile: "Professional profile",
-        openToOpportunities: "Open to new work opportunities",
-        remoteWork: "Available for remote collaboration",
-        techCommunication: "Enjoy technical communication",
+        openToOpportunities: "Open to internship and job opportunities",
+        remoteWork: "Available for remote work",
+        techCommunication: "Enjoy technical communication and learning",
         projectCooperation: "Project Cooperation",
-        projectCoopDesc: "Full-stack development, system architecture design, technical consulting and other project collaborations.",
+        projectCoopDesc: "Mobile application development, full-stack development, system architecture design and other project collaboration opportunities.",
         techExchange: "Technical Exchange",
-        techExchangeDesc: "Open source project discussions, technical sharing, code reviews and other technical exchange activities.",
+        techExchangeDesc: "Open source project discussions, technical sharing, code reviews, learning experience exchanges and other activities.",
         careerOpportunities: "Career Opportunities", 
-        careerOpportunitiesDesc: "Full-time work, remote work, startup partnerships and other career development opportunities.",
+        careerOpportunitiesDesc: "Internship opportunities, graduate positions, remote work, technical team collaboration and other career development opportunities.",
         contactNow: "Contact Now",
         tags: {
-          remoteWork: "Remote Work",
-          longTerm: "Long-term Cooperation",
-          consulting: "Technical Consulting",
+          remoteWork: "Remote Internship",
+          longTerm: "Long-term Learning",
+          consulting: "Technical Mentoring",
           openSource: "Open Source",
           sharing: "Tech Sharing",
           codeReview: "Code Review",
-          fullTime: "Full-time",
-          remote: "Remote",
-          startup: "Startup Partnership"
+          fullTime: "Internship",
+          remote: "Remote Work",
+          startup: "Startup Team"
         }
       }
     }
@@ -327,11 +359,11 @@ const App = () => {
   const t = texts[language];
 
   const navItems = [
-    { id: 'home', label: t.nav.home, icon: Terminal },
-    { id: 'about', label: t.nav.about, icon: User },
-    { id: 'experience', label: t.nav.experience, icon: Briefcase },
-    { id: 'projects', label: t.nav.projects, icon: Code },
-    { id: 'contact', label: t.nav.contact, icon: Mail }
+    { id: 'home' as PageType, label: t.nav.home, icon: Terminal },
+    { id: 'about' as PageType, label: t.nav.about, icon: User },
+    { id: 'experience' as PageType, label: t.nav.experience, icon: Briefcase },
+    { id: 'projects' as PageType, label: t.nav.projects, icon: Code },
+    { id: 'contact' as PageType, label: t.nav.contact, icon: Mail }
   ];
 
   // 内联样式确保科幻效果
@@ -456,7 +488,6 @@ const App = () => {
             </div>
             
             <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-              {/* 导航按钮 */}
               <div style={{ display: 'flex', gap: '4px' }}>
                 {navItems.map((item) => {
                   const Icon = item.icon;
@@ -499,7 +530,6 @@ const App = () => {
                 })}
               </div>
 
-              {/* 语言切换按钮 */}
               <button
                 onClick={toggleLanguage}
                 style={styles.langButton}
@@ -556,7 +586,6 @@ const App = () => {
       position: 'relative',
       overflow: 'hidden'
     }}>
-      {/* 浮动装饰元素 */}
       <div style={{
         ...styles.floatingOrbs,
         background: 'radial-gradient(circle, rgba(0, 245, 255, 0.4) 0%, transparent 70%)',
@@ -580,7 +609,6 @@ const App = () => {
         padding: '96px 16px 64px'
       }}>
         <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
-          {/* 头像区域 */}
           <div style={{ marginBottom: '32px', position: 'relative' }}>
             <div style={{ position: 'relative', display: 'inline-block' }}>
               <div style={styles.glowingAvatar}>
@@ -598,7 +626,6 @@ const App = () => {
             </div>
           </div>
 
-          {/* 主标题 */}
           <h1 style={{
             fontSize: '4rem',
             fontWeight: 'bold',
@@ -630,7 +657,6 @@ const App = () => {
             {t.personal.description}
           </p>
 
-          {/* 技能标签云 */}
           <div style={{
             display: 'flex',
             flexWrap: 'wrap',
@@ -638,7 +664,7 @@ const App = () => {
             gap: '12px',
             marginBottom: '48px'
           }}>
-            {['React', 'TypeScript', 'Node.js', 'Python', 'AI/ML', 'Blockchain'].map((skill, index) => (
+            {['React Native', 'TypeScript', 'Spring Boot', 'Swift', 'PostgreSQL', 'AWS'].map((skill) => (
               <span
                 key={skill}
                 style={{
@@ -666,7 +692,6 @@ const App = () => {
             ))}
           </div>
 
-          {/* CTA按钮 */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', alignItems: 'center' }}>
             <button
               onClick={() => navigateTo('projects')}
@@ -735,9 +760,7 @@ const App = () => {
           gap: '48px',
           alignItems: 'start'
         }}>
-          {/* 左侧：个人简介和基本信息 */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-            {/* 个人简介卡片 */}
             <div style={{
               ...styles.glassCard,
               padding: '32px',
@@ -763,7 +786,6 @@ const App = () => {
               </p>
             </div>
 
-            {/* 基本信息卡片 */}
             <div style={{
               ...styles.glassCard,
               padding: '32px',
@@ -801,7 +823,6 @@ const App = () => {
             </div>
           </div>
 
-          {/* 右侧：技能矩阵 */}
           <div style={{
             ...styles.glassCard,
             padding: '32px'
@@ -821,10 +842,10 @@ const App = () => {
             
             <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
               {[
-                { category: 'Frontend', skills: ['React', 'Next.js', 'TypeScript', 'Tailwind CSS'], icon: Globe },
-                { category: 'Backend', skills: ['Node.js', 'Python', 'Express', 'FastAPI'], icon: Server },
-                { category: 'Database', skills: ['MongoDB', 'PostgreSQL', 'Redis', 'Supabase'], icon: Database },
-                { category: 'Tools', skills: ['Git', 'Docker', 'AWS', 'Vercel'], icon: Zap }
+                { category: 'Mobile & Frontend', skills: ['React Native', 'SwiftUI', 'TypeScript', 'JavaScript'], icon: Globe },
+                { category: 'Backend & Frameworks', skills: ['Spring Boot', 'Flask', '.NET Core', 'Node.js'], icon: Server },
+                { category: 'Database & Cloud', skills: ['PostgreSQL', 'MongoDB', 'AWS', 'Azure'], icon: Database },
+                { category: 'Tools & Languages', skills: ['Java', 'Python', 'Swift', 'Git', 'Docker'], icon: Zap }
               ].map((group) => {
                 const Icon = group.icon;
                 return (
@@ -909,7 +930,6 @@ const App = () => {
           </div>
 
           <div style={{ position: 'relative' }}>
-            {/* 时间线 */}
             <div style={{
               position: 'absolute',
               left: '32px',
@@ -922,7 +942,6 @@ const App = () => {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '48px' }}>
               {experiences.map((exp, index) => (
                 <div key={index} style={{ position: 'relative', display: 'flex', alignItems: 'flex-start' }}>
-                  {/* 时间线节点 */}
                   <div style={{
                     flexShrink: 0,
                     width: '64px',
@@ -944,7 +963,6 @@ const App = () => {
                     )}
                   </div>
                   
-                  {/* 内容卡片 */}
                   <div style={{ marginLeft: '32px', flex: 1 }}>
                     <div style={{
                       ...styles.glassCard,
@@ -1218,7 +1236,7 @@ const App = () => {
                   
                   <div style={{ display: 'flex', gap: '16px' }}>
                     <button
-                      onClick={() => window.open('https://github.com/yourusername', '_blank')}
+                      onClick={() => window.open('https://github.com/ts2015656', '_blank')}
                       style={{
                         display: 'flex',
                         alignItems: 'center',
@@ -1314,7 +1332,6 @@ const App = () => {
           gridTemplateColumns: 'repeat(auto-fit, minmax(450px, 1fr))',
           gap: '48px'
         }}>
-          {/* 左侧：联系信息 */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
             <div style={{
               ...styles.glassCard,
@@ -1366,7 +1383,7 @@ const App = () => {
                 </button>
                 
                 <button
-                  onClick={() => window.open(t.personal.github, '_blank')}
+                  onClick={() => window.open('https://github.com/ts2015656', '_blank')}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -1406,7 +1423,7 @@ const App = () => {
                 </button>
                 
                 <button
-                  onClick={() => window.open(t.personal.linkedin, '_blank')}
+                  onClick={() => window.open('https://linkedin.com/in/tony-wen-sydney', '_blank')}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -1490,7 +1507,6 @@ const App = () => {
             </div>
           </div>
 
-          {/* 右侧：合作方式 */}
           <div style={{
             ...styles.glassCard,
             padding: '32px'
