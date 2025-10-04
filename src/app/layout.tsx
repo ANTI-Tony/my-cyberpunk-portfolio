@@ -5,12 +5,12 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Neo Anderson - Full Stack Developer',
+  title: 'Jingbo Tony Wen - Full Stack Developer',
   description: '科幻风格的个人作品集网站 - 展示我的项目、技能和经历',
   keywords: '全栈开发, React, Next.js, TypeScript, 作品集, 科幻风格',
-  authors: [{ name: 'Neo Anderson' }],
+  authors: [{ name: 'Jingbo Tony Wen' }],
   openGraph: {
-    title: 'Neo Anderson - Full Stack Developer',
+    title: 'Jingbo Tony Wen - Full Stack Developer',
     description: '科幻风格的个人作品集网站',
     type: 'website',
     locale: 'zh_CN',

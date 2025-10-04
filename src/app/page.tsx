@@ -613,7 +613,7 @@ const App = () => {
             <div style={{ position: 'relative', display: 'inline-block' }}>
               <div style={styles.glowingAvatar}>
                 <img
-                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face"
+                  src="https://drive.google.com/file/d/1-KTgNe4n5FcOz01zknxoa7G89mtekh_H/view?usp=sharing"
                   alt="Profile"
                   style={{
                     width: '128px',
@@ -1383,7 +1383,7 @@ const App = () => {
                 </button>
                 
                 <button
-                  onClick={() => window.open('https://github.com/ts2015656', '_blank')}
+                  onClick={() => window.open('https://github.com/ANTI-Tony', '_blank')}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -1423,7 +1423,7 @@ const App = () => {
                 </button>
                 
                 <button
-                  onClick={() => window.open('https://linkedin.com/in/tony-wen-sydney', '_blank')}
+                  onClick={() => window.open('https://www.linkedin.com/in/tony-wen-170461283/', '_blank')}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
