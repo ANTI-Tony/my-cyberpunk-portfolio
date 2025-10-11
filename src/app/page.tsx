@@ -1,9 +1,6 @@
-'use client';
-
 import React, { useState } from 'react';
 import { Github, Linkedin, Mail, ExternalLink, Calendar, MapPin, Code, Briefcase, GraduationCap, User, Menu, X, ChevronRight, Terminal, Zap, Globe, Database, Server, Languages } from 'lucide-react';
 
-// 定义类型接口
 interface Experience {
   title: string;
   company: string;
@@ -18,6 +15,7 @@ interface Project {
   description: string;
   tech: string[];
   status: 'completed' | 'in-progress' | 'concept';
+  github?: string;
 }
 
 type Language = 'zh' | 'en';
@@ -44,10 +42,8 @@ const App = () => {
     setLanguage(language === 'zh' ? 'en' : 'zh');
   };
 
-  // 多语言文本数据
   const texts = {
     zh: {
-      // 导航
       nav: {
         home: '首页',
         about: '关于',
@@ -55,22 +51,20 @@ const App = () => {
         projects: '项目',
         contact: '联系'
       },
-      // 个人信息
       personal: {
         name: "Tony Wen",
         title: "移动应用开发工程师",
         subtitle: "移动开发 // 全栈 // 创新",
         email: "ts2015656@gmail.com",
+        phone: "+61 452062776",
         location: "悉尼，澳大利亚",
         description: "我是一名专注于移动应用开发的软件工程师，擅长跨平台应用开发和后端系统设计。目前在悉尼大学攻读软件工程荣誉学位，具有丰富的实习和项目经验。"
       },
-      // 首页
       home: {
         hello: "你好，我是",
         viewProjects: "查看项目",
         contactMe: "联系我"
       },
-      // 关于页面
       about: {
         title: "关于",
         me: "我",
@@ -85,7 +79,6 @@ const App = () => {
         intro1: "我是一名专注于移动应用开发的软件工程师，目前在悉尼大学攻读软件工程荣誉学位。从跨平台移动应用到后端系统架构，我致力于创造高效、用户友好的数字解决方案。",
         intro2: "在实习和项目经历中，我积累了丰富的React Native、Spring Boot和云服务开发经验。我热衷于学习新技术，追求代码的优雅和性能的极致，相信技术能够改善人们的生活。"
       },
-      // 经历页面
       experience: {
         title: "我的",
         experience: "经历",
@@ -110,7 +103,7 @@ const App = () => {
           },
           {
             title: '研究实习生',
-            company: 'Xinsong Robot Automation Co., Ltd',
+            company: '新松机器人自动化股份有限公司',
             period: '2023.12 - 2024.02',
             description: '专注于工业机器人的计算机视觉和自主导航研究。开发了配备摄像头的机器人自主路径规划算法，导航精度提升85%。',
             skills: ['计算机视觉', '机器人导航', 'Python', '算法优化'],
@@ -126,11 +119,10 @@ const App = () => {
           }
         ] as Experience[]
       },
-      // 项目页面
       projects: {
         title: "我的",
         projects: "项目",
-        subtitle: "探索我开发的移动应用和全栈项目，从健身追踪App到实时聊天平台，每个项目都体现了我在技术上的成长和创新。",
+        subtitle: "探索我开发的移动应用和全栈项目，从社交媒体平台到健身追踪App，每个项目都体现了我在技术上的成长和创新。",
         techStack: "技术栈",
         code: "代码",
         demo: "演示",
@@ -139,32 +131,41 @@ const App = () => {
         concept: "概念阶段",
         projectList: [
           {
-            title: 'Smart Fitness Assistant',
-            description: '使用React Native和Spring Boot开发的全栈健身追踪移动应用。实现了锻炼跟踪、饮食监控和个性化健身目标功能。构建RESTful API支持用户管理、锻炼/饮食记录和统计分析，采用JWT认证和基于角色的访问控制。',
-            tech: ['React Native', 'TypeScript', 'Spring Boot', 'PostgreSQL', 'AWS', 'Docker'],
-            status: 'completed'
+            title: '全栈社交媒体平台',
+            description: '构建了受小红书启发的全功能社交媒体平台，包含内容分享、实时聊天和社交互动功能。使用Spring Boot构建REST API微服务后端，Go开发WebSocket聊天服务。实现了瀑布流、发布内容、即时通讯等核心功能，集成MinIO对象存储和PostgreSQL数据持久化。',
+            tech: ['React Native', 'Spring Boot', 'Go', 'PostgreSQL', 'MinIO', 'WebSocket', 'Docker', 'Nginx', 'JWT'],
+            status: 'completed',
+            github: 'https://github.com/ANTI-Tony/xhsclone'
           },
           {
-            title: 'Brief Notes - 个人理财iOS应用',
+            title: 'Smart Fitness Assistant - 智能健身助手',
+            description: '使用React Native和Spring Boot开发的全栈健身追踪移动应用。实现了运动追踪、饮食监控和个性化健身目标功能。构建RESTful API支持用户管理、运动/饮食记录和统计分析，采用JWT认证和基于角色的访问控制。',
+            tech: ['React Native', 'TypeScript', 'Spring Boot', 'PostgreSQL', 'AWS', 'Docker'],
+            status: 'completed',
+            github: 'https://github.com/ANTI-Tony/Bitness'
+          },
+          {
+            title: 'Brief Notes - 个人财务移动应用',
             description: '使用SwiftUI和Core Data开发的双语支出跟踪iOS应用。实现自动交易记录功能，可解析微信支付和Apple Pay的短信通知。集成SwiftUI Charts进行交互式数据可视化，支持实时汇率转换和自定义快捷交易。',
             tech: ['SwiftUI', 'Core Data', 'WidgetKit', 'Charts', 'NLP'],
-            status: 'completed'
+            status: 'completed',
+            github: 'https://github.com/ANTI-Tony/Brief-Notes'
           },
           {
             title: 'Chat Website (2024 SYNCS Hackathon)',
             description: '在2024 SYNCS Hackathon中获得前5名的实时聊天平台。使用Flask后端和Jinja模板开发，实现安全的用户认证和MySQL数据库存储。集成基于OpenCV的视频聊天功能，采用Git进行敏捷开发团队协作。',
             tech: ['Flask', 'Jinja', 'HTML/CSS/JavaScript', 'MySQL', 'OpenCV', 'Git'],
-            status: 'completed'
+            status: 'completed',
+            github: 'https://github.com/ANTI-Tony/Brief-Notes'
           },
           {
             title: 'Art Flâneur 地图应用',
             description: '正在开发的跨平台白标地图应用MVP，集成MapLibre GL和实时地理跟踪功能。实现了优化的电池使用、GraphQL查询的交互式地点详情、Auth0多种登录方式支持，以及使用Radar SDK的地理围栏系统。',
             tech: ['React Native', 'MapLibre GL', 'GraphQL', 'Auth0', 'Radar SDK'],
-            status: 'in-progress'
+            status: 'completed'
           }
         ] as Project[]
       },
-      // 联系页面
       contact: {
         title: "联系",
         me: "我",
@@ -173,6 +174,7 @@ const App = () => {
         currentStatus: "当前状态",
         cooperationMethods: "合作方式",
         email: "邮箱",
+        phone: "电话",
         github: "GitHub",
         linkedin: "LinkedIn",
         viewMyCode: "查看我的代码",
@@ -201,7 +203,6 @@ const App = () => {
       }
     },
     en: {
-      // Navigation
       nav: {
         home: 'Home',
         about: 'About',
@@ -209,22 +210,20 @@ const App = () => {
         projects: 'Projects', 
         contact: 'Contact'
       },
-      // Personal Info
       personal: {
         name: "Tony Wen",
         title: "Mobile Application Developer",
         subtitle: "Mobile Dev // Full Stack // Innovation",
         email: "ts2015656@gmail.com",
+        phone: "+61 452062776",
         location: "Sydney, Australia",
         description: "I am a software engineer specializing in mobile application development, with expertise in cross-platform app development and backend system design. Currently pursuing Software Engineering Honours at University of Sydney with rich internship and project experience."
       },
-      // Home Page
       home: {
         hello: "Hello, I'm",
         viewProjects: "View Projects",
         contactMe: "Contact Me"
       },
-      // About Page
       about: {
         title: "About",
         me: "Me",
@@ -239,7 +238,6 @@ const App = () => {
         intro1: "I am a software engineer specializing in mobile application development, currently pursuing Software Engineering Honours at University of Sydney. From cross-platform mobile applications to backend system architecture, I am committed to creating efficient and user-friendly digital solutions.",
         intro2: "Through my internship and project experiences, I have accumulated rich experience in React Native, Spring Boot, and cloud service development. I am passionate about learning new technologies, pursuing code elegance and performance excellence, believing that technology can improve people's lives."
       },
-      // Experience Page
       experience: {
         title: "My",
         experience: "Experience",
@@ -280,11 +278,10 @@ const App = () => {
           }
         ] as Experience[]
       },
-      // Projects Page
       projects: {
         title: "My",
         projects: "Projects",
-        subtitle: "Explore my mobile applications and full-stack projects, from fitness tracking apps to real-time chat platforms, each project reflects my technical growth and innovation.",
+        subtitle: "Explore my mobile applications and full-stack projects, from social media platforms to fitness tracking apps, each project reflects my technical growth and innovation.",
         techStack: "Tech Stack",
         code: "Code",
         demo: "Demo", 
@@ -293,22 +290,32 @@ const App = () => {
         concept: "Concept",
         projectList: [
           {
+            title: 'Full Stack Social Media Platform',
+            description: 'Built full-featured social media platform inspired by Xiaohongshu with content sharing, real-time chat, and social interactions. Architected microservices backend using Spring Boot for REST APIs and Go for WebSocket chat service. Implemented waterfall feed, post creation, instant messaging with MinIO object storage and PostgreSQL.',
+            tech: ['React Native', 'Spring Boot', 'Go', 'PostgreSQL', 'MinIO', 'WebSocket', 'Docker', 'Nginx', 'JWT'],
+            status: 'completed',
+            github: 'https://github.com/ANTI-Tony/xhsclone'
+          },
+          {
             title: 'Smart Fitness Assistant',
             description: 'Comprehensive fitness tracking mobile app developed using React Native and Spring Boot. Implemented core features including workout tracking, diet monitoring, and personalized fitness goals. Built RESTful APIs with JWT-based authentication and role-based access control.',
             tech: ['React Native', 'TypeScript', 'Spring Boot', 'PostgreSQL', 'AWS', 'Docker'],
-            status: 'completed'
+            status: 'completed',
+            github: 'https://github.com/ANTI-Tony/Bitness'
           },
           {
-            title: 'Brief Notes - Personal Finance iOS App',
+            title: 'Brief Notes - Personal Finance Mobile App',
             description: 'Bilingual expense tracking iOS app using SwiftUI and Core Data. Built automatic transaction recording feature that parses SMS notifications from WeChat Pay and Apple Pay. Created interactive data visualization with SwiftUI Charts for expense analysis.',
             tech: ['SwiftUI', 'Core Data', 'WidgetKit', 'Charts', 'NLP'],
-            status: 'completed'
+            status: 'completed',
+            github: 'https://github.com/ANTI-Tony/Brief-Notes'
           },
           {
             title: 'Chat Website (2024 SYNCS Hackathon)',
             description: 'Top 5 finalist real-time chat platform developed using Flask backend and Jinja templating. Implemented secure user authentication and database storage using MySQL. Integrated video chat functionality using Python OpenCV library.',
             tech: ['Flask', 'Jinja', 'HTML/CSS/JavaScript', 'MySQL', 'OpenCV', 'Git'],
-            status: 'completed'
+            status: 'completed',
+            github: 'https://github.com/ANTI-Tony/Brief-Notes'
           },
           {
             title: 'Art Flâneur Mapping Application',
@@ -318,7 +325,6 @@ const App = () => {
           }
         ] as Project[]
       },
-      // Contact Page
       contact: {
         title: "Contact",
         me: "Me",
@@ -327,6 +333,7 @@ const App = () => {
         currentStatus: "Current Status",
         cooperationMethods: "Cooperation Methods",
         email: "Email",
+        phone: "Phone",
         github: "GitHub",
         linkedin: "LinkedIn",
         viewMyCode: "View my code",
@@ -366,7 +373,6 @@ const App = () => {
     { id: 'contact' as PageType, label: t.nav.contact, icon: Mail }
   ];
 
-  // 内联样式确保科幻效果
   const styles = {
     neonText: {
       background: 'linear-gradient(45deg, #00f5ff, #ff00ff, #00f5ff)',
@@ -439,7 +445,7 @@ const App = () => {
 
   const Navigation = () => (
     <>
-      <style jsx>{`
+      <style>{`
         @keyframes neonPulse {
           0%, 100% { background-position: 0% 50%; }
           50% { background-position: 100% 50%; }
@@ -612,16 +618,20 @@ const App = () => {
           <div style={{ marginBottom: '32px', position: 'relative' }}>
             <div style={{ position: 'relative', display: 'inline-block' }}>
               <div style={styles.glowingAvatar}>
-                <img
-                  src="https://drive.google.com/file/d/1-KTgNe4n5FcOz01zknxoa7G89mtekh_H/view?usp=sharing"
-                  alt="Profile"
-                  style={{
-                    width: '128px',
-                    height: '128px',
-                    borderRadius: '50%',
-                    objectFit: 'cover'
-                  }}
-                />
+                <div style={{
+                  width: '128px',
+                  height: '128px',
+                  borderRadius: '50%',
+                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '48px',
+                  fontWeight: 'bold',
+                  color: '#fff'
+                }}>
+                  TW
+                </div>
               </div>
             </div>
           </div>
@@ -664,7 +674,7 @@ const App = () => {
             gap: '12px',
             marginBottom: '48px'
           }}>
-            {['React Native', 'TypeScript', 'Spring Boot', 'Swift', 'PostgreSQL', 'AWS'].map((skill) => (
+            {['React Native', 'TypeScript', 'Spring Boot', 'Swift', 'Go', 'PostgreSQL'].map((skill) => (
               <span
                 key={skill}
                 style={{
@@ -843,9 +853,9 @@ const App = () => {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
               {[
                 { category: 'Mobile & Frontend', skills: ['React Native', 'SwiftUI', 'TypeScript', 'JavaScript'], icon: Globe },
-                { category: 'Backend & Frameworks', skills: ['Spring Boot', 'Flask', '.NET Core', 'Node.js'], icon: Server },
+                { category: 'Backend & Frameworks', skills: ['Spring Boot', 'Go', 'Flask', '.NET Core'], icon: Server },
                 { category: 'Database & Cloud', skills: ['PostgreSQL', 'MongoDB', 'AWS', 'Azure'], icon: Database },
-                { category: 'Tools & Languages', skills: ['Java', 'Python', 'Swift', 'Git', 'Docker'], icon: Zap }
+                { category: 'Tools & Languages', skills: ['Java', 'Python', 'Swift', 'C++', 'Qt', 'Docker'], icon: Zap }
               ].map((group) => {
                 const Icon = group.icon;
                 return (
@@ -1075,6 +1085,7 @@ const App = () => {
   const ProjectsPage = () => {
     const projects = t.projects.projectList;
     const projectImages = [
+      'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=600&h=300&fit=crop',
       'https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=600&h=300&fit=crop',
       'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=600&h=300&fit=crop',
       'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=600&h=300&fit=crop',
@@ -1184,7 +1195,7 @@ const App = () => {
                       fontSize: '12px',
                       fontWeight: '500'
                     }}>
-                      2024
+                      2024-2025
                     </span>
                   </div>
                 </div>
@@ -1235,34 +1246,36 @@ const App = () => {
                   </div>
                   
                   <div style={{ display: 'flex', gap: '16px' }}>
-                    <button
-                      onClick={() => window.open('https://github.com/ts2015656', '_blank')}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px',
-                        padding: '12px 20px',
-                        background: 'rgba(255, 255, 255, 0.1)',
-                        color: '#ccc',
-                        border: '1px solid rgba(255, 255, 255, 0.2)',
-                        borderRadius: '8px',
-                        cursor: 'pointer',
-                        fontSize: '14px',
-                        fontWeight: '500',
-                        transition: 'all 0.3s ease'
-                      }}
-                      onMouseOver={(e) => {
-                        e.currentTarget.style.background = 'rgba(255, 255, 255, 0.15)';
-                        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.3)';
-                      }}
-                      onMouseOut={(e) => {
-                        e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
-                        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.2)';
-                      }}
-                    >
-                      <Github size={18} />
-                      <span>{t.projects.code}</span>
-                    </button>
+                    {project.github && (
+                      <button
+                        onClick={() => window.open(project.github, '_blank')}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '8px',
+                          padding: '12px 20px',
+                          background: 'rgba(255, 255, 255, 0.1)',
+                          color: '#ccc',
+                          border: '1px solid rgba(255, 255, 255, 0.2)',
+                          borderRadius: '8px',
+                          cursor: 'pointer',
+                          fontSize: '14px',
+                          fontWeight: '500',
+                          transition: 'all 0.3s ease'
+                        }}
+                        onMouseOver={(e) => {
+                          e.currentTarget.style.background = 'rgba(255, 255, 255, 0.15)';
+                          e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.3)';
+                        }}
+                        onMouseOut={(e) => {
+                          e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
+                          e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+                        }}
+                      >
+                        <Github size={18} />
+                        <span>{t.projects.code}</span>
+                      </button>
+                    )}
                     {project.status !== 'concept' && (
                       <button
                         onClick={() => window.open('https://demo-site.com', '_blank')}
@@ -1638,7 +1651,7 @@ const App = () => {
 
   return (
     <div style={{ minHeight: '100vh', background: '#000', color: '#fff' }}>
-      <style jsx global>{`
+      <style>{`
         @keyframes pulse {
           0%, 100% { opacity: 1; }
           50% { opacity: .5; }
