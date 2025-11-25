@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from 'react';
 import { Github, Linkedin, Mail, ExternalLink, Calendar, MapPin, Code, Briefcase, GraduationCap, User, Menu, X, ChevronRight, Terminal, Zap, Globe, Database, Server, Languages } from 'lucide-react';
 
@@ -315,13 +317,13 @@ const App = () => {
             description: 'Top 5 finalist real-time chat platform developed using Flask backend and Jinja templating. Implemented secure user authentication and database storage using MySQL. Integrated video chat functionality using Python OpenCV library.',
             tech: ['Flask', 'Jinja', 'HTML/CSS/JavaScript', 'MySQL', 'OpenCV', 'Git'],
             status: 'completed',
-            github: 'https://github.com/ANTI-Tony/Brief-Notes'
+            github: 'https://github.com/11x-x11/2024_Hachakthon'
           },
           {
             title: 'Art Flâneur Mapping Application',
             description: 'Cross-platform white-label mapping application MVP with MapLibre GL integration and real-time geo-tracking functionality. Features optimized battery usage, interactive place details via GraphQL queries, and Auth0 authentication system.',
             tech: ['React Native', 'MapLibre GL', 'GraphQL', 'Auth0', 'Radar SDK'],
-            status: 'in-progress'
+            status: 'completed'
           }
         ] as Project[]
       },
