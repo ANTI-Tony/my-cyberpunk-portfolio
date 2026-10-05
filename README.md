@@ -10,6 +10,7 @@
 所有文字（简介、论文、经历、项目、技能、教育、写作）都在 [`src/content/profile.ts`](src/content/profile.ts) 里，中英文并排。改完推送到 `main`，Vercel 会自动部署。
 
 - 需要加粗的地方用 `**双星号**` 包起来。
+- 首页地球上的地点在 [`src/content/places.ts`](src/content/places.ts)：经纬度、中英文地名、时间和一句说明，顺序就是卡片里“上一个 / 下一个”的顺序。
 - 论文作者顺序与 arXiv 上保持一致。
 
 ## 本地开发
@@ -29,6 +30,7 @@ src/
 │   ├── (zh)/zh/         # 中文版，对应 /zh
 │   ├── shell.tsx        # 两个语言共用的 <html> 外壳、字体与 metadata
 │   └── globals.css      # 全部样式与深浅色主题变量
-├── components/          # 页面与交互组件
-└── content/profile.ts   # 站点内容
+├── components/          # 页面与交互组件（globe/ 是 three.js 地球）
+└── content/             # 站点内容：profile.ts 文字，places.ts 地点
+public/earth/            # NASA 地球影像（白天 / 夜景）与加载时的静态图
 ```

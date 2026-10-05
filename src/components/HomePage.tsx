@@ -1,5 +1,6 @@
 import { Fragment, type CSSProperties, type ReactNode } from 'react';
 import { ArrowUpRight, Github, GraduationCap, Linkedin, Mail, PenLine } from 'lucide-react';
+import Hero from './Hero';
 import SectionNav from './SectionNav';
 import ThemeToggle from './ThemeToggle';
 import {
@@ -89,7 +90,7 @@ export default function HomePage({ lang }: { lang: Lang }) {
   const intro = about[lang];
   const edu = education[lang];
   const blog = writing[lang];
-  const navItems = sectionIds.filter((id) => id !== 'about').map((id) => ({ id, label: t.sections[id] }));
+  const navItems = sectionIds.map((id) => ({ id, label: t.sections[id] }));
   const other =
     lang === 'en' ? { href: '/zh', label: '中文', lang: 'zh-CN' } : { href: '/', label: 'EN', lang: 'en' };
 
@@ -125,141 +126,155 @@ export default function HomePage({ lang }: { lang: Lang }) {
         </div>
       </header>
 
-      <main id="main" className="wrap">
-        <section className="hero" id="top">
-          <p className="eyebrow rise" style={step(0)}>
-            {intro.eyebrow}
-          </p>
-          <h1 className="rise" style={step(1)}>
-            {site.name} <span className="aka">({site.nickname})</span>
-          </h1>
-          <ul className="contact rise" style={step(2)}>
-            <li>
-              <a href={`mailto:${site.email}`}>
-                <Mail size={16} strokeWidth={1.75} aria-hidden />
-                {site.email}
-              </a>
-            </li>
-            <li>
-              <External href={site.links.scholar}>
-                <GraduationCap size={16} strokeWidth={1.75} aria-hidden />
-                Google Scholar
-              </External>
-            </li>
-            <li>
-              <External href={site.links.github}>
-                <Github size={16} strokeWidth={1.75} aria-hidden />
-                GitHub
-              </External>
-            </li>
-            <li>
-              <External href={site.links.linkedin}>
-                <Linkedin size={16} strokeWidth={1.75} aria-hidden />
-                LinkedIn
-              </External>
-            </li>
-            <li>
-              <External href={site.links.juejin}>
-                <PenLine size={16} strokeWidth={1.75} aria-hidden />
-                {lang === 'en' ? 'Juejin' : '掘金'}
-              </External>
-            </li>
-          </ul>
-        </section>
-
-        <Section id="about" label={t.sections.about}>
-          <p className="lead">{intro.lead}</p>
-          <p className="bio">{intro.bio}</p>
-          <p className="status">{intro.status}</p>
-        </Section>
-
-        <Section
-          id="research"
-          label={t.sections.research}
-          note={
-            <External href={site.links.scholar} className="section-note">
-              {t.scholarNote}
-              <ArrowUpRight size={13} strokeWidth={1.75} aria-hidden />
-            </External>
+      <main id="main">
+        <Hero
+          lang={lang}
+          head={
+            <>
+              <p className="eyebrow rise" style={step(0)}>
+                {intro.eyebrow.split(' · ').map((part, i) => (
+                  <Fragment key={part}>
+                    {i > 0 && ' · '}
+                    <span className="nowrap">{part}</span>
+                  </Fragment>
+                ))}
+              </p>
+              <h1 className="rise" style={step(1)}>
+                {site.name} <span className="aka">({site.nickname})</span>
+              </h1>
+            </>
           }
-        >
-          <ol className="pubs">
-            {publications.map((pub) => (
-              <li className="pub" key={pub.arxiv}>
-                <h3 className="pub-title" lang="en">
-                  <External href={`https://arxiv.org/abs/${pub.arxiv}`}>{pub.title}</External>
-                </h3>
-                <p className="pub-authors" lang="en">
-                  {pub.authors.map((author, i) => (
-                    <Fragment key={author}>
-                      {i > 0 && ', '}
-                      {author === site.name ? <strong>{author}</strong> : author}
-                    </Fragment>
-                  ))}
-                </p>
-                <p className="pub-venue">
-                  {t.preprint} · <span className="mono">arXiv:{pub.arxiv}</span> [{pub.category}] · {pub.date[lang]}
-                </p>
-                <p className="pub-summary">
-                  <Rich text={pub.summary[lang]} />
-                </p>
-                <p className="pub-links">
-                  <External href={`https://arxiv.org/abs/${pub.arxiv}`}>arXiv</External>
-                  <External href={`https://arxiv.org/pdf/${pub.arxiv}`}>PDF</External>
-                  {pub.code && <External href={pub.code}>Code</External>}
-                </p>
-              </li>
-            ))}
-          </ol>
-        </Section>
+          intro={
+            <div className="hero-intro rise" style={step(2)}>
+              <p className="lead">{intro.lead}</p>
+              <p className="bio">{intro.bio}</p>
+              <p className="status">{intro.status}</p>
+              <ul className="contact">
+                <li>
+                  <a href={`mailto:${site.email}`}>
+                    <Mail size={16} strokeWidth={1.75} aria-hidden />
+                    {site.email}
+                  </a>
+                </li>
+                <li>
+                  <External href={site.links.scholar}>
+                    <GraduationCap size={16} strokeWidth={1.75} aria-hidden />
+                    Google Scholar
+                  </External>
+                </li>
+                <li>
+                  <External href={site.links.github}>
+                    <Github size={16} strokeWidth={1.75} aria-hidden />
+                    GitHub
+                  </External>
+                </li>
+                <li>
+                  <External href={site.links.linkedin}>
+                    <Linkedin size={16} strokeWidth={1.75} aria-hidden />
+                    LinkedIn
+                  </External>
+                </li>
+                <li>
+                  <External href={site.links.juejin}>
+                    <PenLine size={16} strokeWidth={1.75} aria-hidden />
+                    {lang === 'en' ? 'Juejin' : '掘金'}
+                  </External>
+                </li>
+              </ul>
+            </div>
+          }
+        />
 
-        <Section id="experience" label={t.sections.experience}>
-          {experience.map((entry) => (
-            <EntryBlock key={entry.org.en} entry={entry} lang={lang} />
-          ))}
-        </Section>
-
-        <Section id="projects" label={t.sections.projects}>
-          {projects.map((entry) => (
-            <EntryBlock key={entry.org.en} entry={entry} lang={lang} />
-          ))}
-        </Section>
-
-        <Section id="skills" label={t.sections.skills}>
-          <dl className="skills">
-            {skills.map((group) => (
-              <div key={group.label.en}>
-                <dt>{group.label[lang]}</dt>
-                <dd lang="en">{group.items.join(' · ')}</dd>
-              </div>
-            ))}
-          </dl>
-        </Section>
-
-        <Section id="education" label={t.sections.education}>
-          <article className="entry">
-            <header className="entry-head">
-              <h3 className="entry-org">{edu.school}</h3>
-              <p className="entry-date">{edu.date}</p>
-            </header>
-            <p className="entry-role">{edu.degree}</p>
-            <ul className="facts">
-              {edu.facts.map((fact) => (
-                <li key={fact}>{fact}</li>
+        <div className="wrap">
+          <Section
+            id="research"
+            label={t.sections.research}
+            note={
+              <External href={site.links.scholar} className="section-note">
+                {t.scholarNote}
+                <ArrowUpRight size={13} strokeWidth={1.75} aria-hidden />
+              </External>
+            }
+          >
+            <p className="section-intro">{intro.research}</p>
+            <ol className="pubs">
+              {publications.map((pub) => (
+                <li className="pub" key={pub.arxiv}>
+                  <h3 className="pub-title" lang="en">
+                    <External href={`https://arxiv.org/abs/${pub.arxiv}`}>{pub.title}</External>
+                  </h3>
+                  <p className="pub-authors" lang="en">
+                    {pub.authors.map((author, i) => (
+                      <Fragment key={author}>
+                        {i > 0 && ', '}
+                        {author === site.name ? <strong>{author}</strong> : author}
+                      </Fragment>
+                    ))}
+                  </p>
+                  <p className="pub-venue">
+                    {t.preprint} · <span className="mono">arXiv:{pub.arxiv}</span> [{pub.category}] · {pub.date[lang]}
+                  </p>
+                  <p className="pub-summary">
+                    <Rich text={pub.summary[lang]} />
+                  </p>
+                  <p className="pub-links">
+                    <External href={`https://arxiv.org/abs/${pub.arxiv}`}>arXiv</External>
+                    <External href={`https://arxiv.org/pdf/${pub.arxiv}`}>PDF</External>
+                    {pub.code && <External href={pub.code}>Code</External>}
+                  </p>
+                </li>
               ))}
-            </ul>
-          </article>
-        </Section>
+            </ol>
+          </Section>
 
-        <Section id="writing" label={t.sections.writing}>
-          <p>{blog.text}</p>
-          <p className="cta">
-            <External href={site.links.juejin} className="text-link">
-              {blog.cta}
-              <ArrowUpRight size={14} strokeWidth={1.75} aria-hidden />
-            </External>
-          </p>
-        </Section>
+          <Section id="experience" label={t.sections.experience}>
+            {experience.map((entry) => (
+              <EntryBlock key={entry.org.en} entry={entry} lang={lang} />
+            ))}
+          </Section>
+
+          <Section id="projects" label={t.sections.projects}>
+            {projects.map((entry) => (
+              <EntryBlock key={entry.org.en} entry={entry} lang={lang} />
+            ))}
+          </Section>
+
+          <Section id="skills" label={t.sections.skills}>
+            <dl className="skills">
+              {skills.map((group) => (
+                <div key={group.label.en}>
+                  <dt>{group.label[lang]}</dt>
+                  <dd lang="en">{group.items.join(' · ')}</dd>
+                </div>
+              ))}
+            </dl>
+          </Section>
+
+          <Section id="education" label={t.sections.education}>
+            <article className="entry">
+              <header className="entry-head">
+                <h3 className="entry-org">{edu.school}</h3>
+                <p className="entry-date">{edu.date}</p>
+              </header>
+              <p className="entry-role">{edu.degree}</p>
+              <ul className="facts">
+                {edu.facts.map((fact) => (
+                  <li key={fact}>{fact}</li>
+                ))}
+              </ul>
+            </article>
+          </Section>
+
+          <Section id="writing" label={t.sections.writing}>
+            <p>{blog.text}</p>
+            <p className="cta">
+              <External href={site.links.juejin} className="text-link">
+                {blog.cta}
+                <ArrowUpRight size={14} strokeWidth={1.75} aria-hidden />
+              </External>
+            </p>
+          </Section>
+        </div>
       </main>
 
       <footer className="wrap">
@@ -272,6 +287,9 @@ export default function HomePage({ lang }: { lang: Lang }) {
             <External href={site.links.scholar}>Scholar</External>
             <External href={site.links.github}>GitHub</External>
             <a href="#top">{t.backToTop} ↑</a>
+          </p>
+          <p className="footer-credit">
+            <External href="https://visibleearth.nasa.gov/collection/1484/blue-marble">{t.imagery}</External>
           </p>
         </div>
       </footer>

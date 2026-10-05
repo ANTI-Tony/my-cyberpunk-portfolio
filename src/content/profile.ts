@@ -2,7 +2,7 @@
 // Inline emphasis uses **double asterisks**; see <Rich> in components/HomePage.tsx.
 
 export type Lang = 'en' | 'zh';
-type Localized<T = string> = Record<Lang, T>;
+export type Localized<T = string> = Record<Lang, T>;
 
 export const site = {
   url: 'https://jtw-sable.vercel.app',
@@ -17,7 +17,7 @@ export const site = {
   },
 };
 
-export const sectionIds = ['about', 'research', 'experience', 'projects', 'skills', 'education', 'writing'] as const;
+export const sectionIds = ['research', 'experience', 'projects', 'skills', 'education', 'writing'] as const;
 export type SectionId = (typeof sectionIds)[number];
 
 export const ui: Localized<{
@@ -31,6 +31,17 @@ export const ui: Localized<{
   scholarNote: string;
   updated: string;
   backToTop: string;
+  imagery: string;
+  globe: {
+    places: string;
+    hint: string;
+    back: string;
+    prev: string;
+    next: string;
+    zoomIn: string;
+    zoomOut: string;
+    reset: string;
+  };
 }> = {
   en: {
     title: 'Jingbo Wen (Tony) — LLM Systems',
@@ -40,7 +51,6 @@ export const ui: Localized<{
     navLabel: 'Sections',
     themeToggle: 'Toggle colour theme',
     sections: {
-      about: 'About',
       research: 'Research',
       experience: 'Experience',
       projects: 'Projects',
@@ -52,6 +62,17 @@ export const ui: Localized<{
     scholarNote: 'Full list on Google Scholar',
     updated: 'Last updated October 2026',
     backToTop: 'Back to top',
+    imagery: 'Earth imagery: NASA',
+    globe: {
+      places: 'Places',
+      hint: 'Drag to turn the globe · pick a place to fly there',
+      back: 'Back',
+      prev: 'Previous place',
+      next: 'Next place',
+      zoomIn: 'Zoom in',
+      zoomOut: 'Zoom out',
+      reset: 'Reset view',
+    },
   },
   zh: {
     title: 'Jingbo Wen (Tony) — LLM 系统与基础设施',
@@ -61,7 +82,6 @@ export const ui: Localized<{
     navLabel: '页面导航',
     themeToggle: '切换深色 / 浅色',
     sections: {
-      about: '简介',
       research: '研究',
       experience: '经历',
       projects: '项目',
@@ -73,21 +93,36 @@ export const ui: Localized<{
     scholarNote: '完整列表见 Google Scholar',
     updated: '最后更新于 2026 年 10 月',
     backToTop: '回到顶部',
+    imagery: '地球影像：NASA',
+    globe: {
+      places: '足迹',
+      hint: '拖动旋转地球 · 点选地点即可飞过去',
+      back: '返回',
+      prev: '上一个地点',
+      next: '下一个地点',
+      zoomIn: '放大',
+      zoomOut: '缩小',
+      reset: '回到初始视角',
+    },
   },
 };
 
-export const about: Localized<{ eyebrow: string; lead: string; bio: string; status: string }> = {
+export const about: Localized<{ eyebrow: string; lead: string; bio: string; status: string; research: string }> = {
   en: {
     eyebrow: 'LLM Systems · Efficient Inference · Compute Allocation',
     lead: 'I build and study infrastructure for large language models: inference serving, speculative decoding, and distributed training.',
-    bio: 'I am completing a B.Eng. (Hons) in Software Engineering at the University of Sydney. Most recently I was an Applied Scientist Intern at Microsoft, working on foundation-model serving; before that, an Agent Engineering Intern at Xiaohongshu (RedNote). My research is on allocating inference compute: consequence-aware reasoning budgets and visual token compression, budget-robust speculative decoding, reward-aware execution gating for agents, and market-aware routing across inference providers.',
+    bio: 'I am completing a B.Eng. (Hons) in Software Engineering at the University of Sydney. Most recently I was an Applied Scientist Intern at Microsoft, working on foundation-model serving; before that, an Agent Engineering Intern at Xiaohongshu (RedNote).',
     status: 'Open to LLM Engineer / LLM Infrastructure roles.',
+    research:
+      'My research is on allocating inference compute: consequence-aware reasoning budgets and visual token compression, budget-robust speculative decoding, reward-aware execution gating for agents, and market-aware routing across inference providers.',
   },
   zh: {
     eyebrow: 'LLM 系统 · 高效推理 · 算力分配',
     lead: '我研究并构建大语言模型的基础设施：推理服务、投机解码与分布式训练。',
-    bio: '目前在悉尼大学攻读软件工程荣誉学士学位。最近在微软担任 Applied Scientist 实习生，做基础模型的推理服务；此前在小红书担任 Agent 工程实习生。研究方向是推理算力的分配：后果感知的推理预算与视觉 token 压缩、预算鲁棒的投机解码、面向智能体的回报感知执行门控，以及跨推理服务商的市场感知路由。',
+    bio: '目前在悉尼大学攻读软件工程荣誉学士学位。最近在微软担任 Applied Scientist 实习生，做基础模型的推理服务；此前在小红书担任 Agent 工程实习生。',
     status: '正在寻找 LLM 工程 / LLM 基础设施方向的职位。',
+    research:
+      '研究方向是推理算力的分配：后果感知的推理预算与视觉 token 压缩、预算鲁棒的投机解码、面向智能体的回报感知执行门控，以及跨推理服务商的市场感知路由。',
   },
 };
 
