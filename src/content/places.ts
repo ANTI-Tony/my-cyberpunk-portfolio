@@ -14,6 +14,17 @@ export interface Place {
 
 export const places: Place[] = [
   {
+    id: 'shenyang',
+    lat: 41.8057,
+    lon: 123.4315,
+    name: { en: 'Shenyang', zh: '沈阳' },
+    country: { en: 'China', zh: '中国' },
+    note: {
+      en: 'Home.',
+      zh: '家在这里。',
+    },
+  },
+  {
     id: 'sydney',
     lat: -33.8886,
     lon: 151.1873,
@@ -32,16 +43,9 @@ export const places: Place[] = [
     name: { en: 'Shanghai', zh: '上海' },
     country: { en: 'China', zh: '中国' },
     note: {
-      en: 'Home base in China.',
-      zh: '在国内时常驻的城市。',
+      en: 'Where I plan to build my career.',
+      zh: '以后打算在这里发展。',
     },
-  },
-  {
-    id: 'shenyang',
-    lat: 41.8057,
-    lon: 123.4315,
-    name: { en: 'Shenyang', zh: '沈阳' },
-    country: { en: 'China', zh: '中国' },
   },
 ];
 
