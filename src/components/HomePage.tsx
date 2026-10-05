@@ -2,7 +2,6 @@ import { Fragment, type CSSProperties, type ReactNode } from 'react';
 import { ArrowUpRight, Github, GraduationCap, Linkedin, Mail, PenLine } from 'lucide-react';
 import Hero from './Hero';
 import SectionNav from './SectionNav';
-import ThemeToggle from './ThemeToggle';
 import {
   about,
   education,
@@ -121,7 +120,6 @@ export default function HomePage({ lang }: { lang: Lang }) {
             <a className="lang-switch" href={other.href} hrefLang={other.lang} lang={other.lang}>
               {other.label}
             </a>
-            <ThemeToggle label={t.themeToggle} />
           </div>
         </div>
       </header>

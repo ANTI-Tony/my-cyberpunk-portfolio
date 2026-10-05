@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { Compass, Minus, Plus } from 'lucide-react';
+import { Compass, Minus, Moon, Plus, Sun } from 'lucide-react';
 import type { Earth, ScreenPoint } from './earth';
 import { projectHome } from './view';
 import type { Place } from '@/content/places';
@@ -13,10 +13,12 @@ interface GlobeProps {
   selected: string | null;
   onSelect: (id: string) => void;
   onClose: () => void;
-  labels: { zoomIn: string; zoomOut: string; reset: string };
+  labels: { zoomIn: string; zoomOut: string; reset: string; day: string; night: string; canvas: string };
 }
 
 type Status = 'loading' | 'ready' | 'fallback';
+
+const NIGHT_KEY = 'earth-view';
 
 // The WebGL globe. three.js is loaded on demand, so the page renders (and works) before it arrives;
 // until then, or without WebGL, the stage shows a still image of the globe.
@@ -28,7 +30,21 @@ export default function Globe({ lang, places, selected, onSelect, onClose, label
   const selectedRef = useRef(selected);
   const resetRef = useRef(false);
   const [status, setStatus] = useState<Status>('loading');
-  const [overflowing, setOverflowing] = useState(false);
+  const [night, setNight] = useState(false);
+  const nightRef = useRef(night);
+
+  useEffect(() => {
+    try {
+      if (localStorage.getItem(NIGHT_KEY) === 'night') setNight(true);
+    } catch {
+      // Storage unavailable: start on the day side.
+    }
+  }, []);
+
+  useEffect(() => {
+    nightRef.current = night;
+    earthRef.current?.setNight(night);
+  }, [night]);
 
   useEffect(() => {
     const stage = stageRef.current;
@@ -38,9 +54,6 @@ export default function Globe({ lang, places, selected, onSelect, onClose, label
     let earth: Earth | null = null;
     let cancelled = false;
     const cleanups: (() => void)[] = [];
-    const root = document.documentElement;
-    const darkScheme = matchMedia('(prefers-color-scheme: dark)');
-    const isNight = () => (root.dataset.theme ? root.dataset.theme === 'dark' : darkScheme.matches);
 
     const placeMarkers = (points: Pick<ScreenPoint, 'x' | 'y' | 'facing'>[]) => {
       points.forEach(({ x, y, facing }, i) => {
@@ -73,11 +86,10 @@ export default function Globe({ lang, places, selected, onSelect, onClose, label
           earth = createEarth({
             canvas,
             points: places,
-            night: isNight(),
+            night: nightRef.current,
             reducedMotion: matchMedia('(prefers-reduced-motion: reduce)').matches,
             textureSize: devicePixels > 900 ? '4k' : '2k',
             onFrame: placeMarkers,
-            onOverflow: setOverflowing,
             onContextLost: fallback,
           });
         } catch {
@@ -90,15 +102,9 @@ export default function Globe({ lang, places, selected, onSelect, onClose, label
         resize.observe(stage);
         const onScreen = new IntersectionObserver(([entry]) => earth?.setActive(entry.isIntersecting));
         onScreen.observe(stage);
-        const syncTheme = () => earth?.setNight(isNight());
-        const theme = new MutationObserver(syncTheme);
-        theme.observe(root, { attributes: true, attributeFilter: ['data-theme'] });
-        darkScheme.addEventListener('change', syncTheme);
         cleanups.push(() => {
           resize.disconnect();
           onScreen.disconnect();
-          theme.disconnect();
-          darkScheme.removeEventListener('change', syncTheme);
         });
 
         const open = places.find((p) => p.id === selectedRef.current);
@@ -140,10 +146,21 @@ export default function Globe({ lang, places, selected, onSelect, onClose, label
     }
   };
 
+  const toggleNight = () => {
+    const next = !night;
+    setNight(next);
+    try {
+      localStorage.setItem(NIGHT_KEY, next ? 'night' : 'day');
+    } catch {
+      // The choice just won't be remembered.
+    }
+  };
+
   return (
-    <div className="globe" ref={stageRef} data-status={status} data-overflowing={overflowing ? '' : undefined}>
+    <div className="globe" ref={stageRef} data-status={status} data-night={night ? '' : undefined}>
       <div className="globe-poster" aria-hidden="true" />
-      <canvas ref={canvasRef} className="globe-canvas" aria-hidden="true" />
+      {/* Drag, or focus it and use the arrow keys, to turn the globe. */}
+      <canvas ref={canvasRef} className="globe-canvas" role="img" tabIndex={0} aria-label={labels.canvas} />
       {/* Pointer targets only; the place list beside the globe is the accessible way in. */}
       <div className="globe-markers" aria-hidden="true">
         {places.map((place, i) => (
@@ -169,6 +186,14 @@ export default function Globe({ lang, places, selected, onSelect, onClose, label
         </button>
         <button type="button" aria-label={labels.zoomOut} title={labels.zoomOut} onClick={() => earthRef.current?.zoomBy(1.25)}>
           <Minus size={16} strokeWidth={1.75} aria-hidden />
+        </button>
+        <button
+          type="button"
+          aria-label={night ? labels.day : labels.night}
+          title={night ? labels.day : labels.night}
+          onClick={toggleNight}
+        >
+          {night ? <Sun size={16} strokeWidth={1.75} aria-hidden /> : <Moon size={16} strokeWidth={1.75} aria-hidden />}
         </button>
         <button type="button" aria-label={labels.reset} title={labels.reset} onClick={reset}>
           <Compass size={16} strokeWidth={1.75} aria-hidden />

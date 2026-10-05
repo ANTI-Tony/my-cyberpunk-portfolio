@@ -24,9 +24,6 @@ const sans = Inter({
 const htmlLang: Record<Lang, string> = { en: 'en', zh: 'zh-CN' };
 const paths: Record<Lang, string> = { en: '/', zh: '/zh' };
 
-// Runs before first paint so the stored (or system) theme applies without a flash.
-const themeScript = `(function(){try{var t=localStorage.getItem('theme');if(t!=='light'&&t!=='dark'){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.dataset.theme=t}catch(e){}})()`;
-
 export function siteMetadata(lang: Lang): Metadata {
   const { title, description } = ui[lang];
   return {
@@ -53,19 +50,14 @@ export function siteMetadata(lang: Lang): Metadata {
 export const siteViewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#fcfbf8' },
-    { media: '(prefers-color-scheme: dark)', color: '#131210' },
-  ],
+  themeColor: '#03050b',
+  colorScheme: 'dark',
 };
 
 export function Shell({ lang, children }: { lang: Lang; children: ReactNode }) {
   return (
-    <html lang={htmlLang[lang]} className={`${serif.variable} ${sans.variable}`} suppressHydrationWarning>
-      <body>
-        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
-        {children}
-      </body>
+    <html lang={htmlLang[lang]} className={`${serif.variable} ${sans.variable}`}>
+      <body>{children}</body>
     </html>
   );
 }

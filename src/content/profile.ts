@@ -25,7 +25,6 @@ export const ui: Localized<{
   description: string;
   skip: string;
   navLabel: string;
-  themeToggle: string;
   sections: Record<SectionId, string>;
   preprint: string;
   scholarNote: string;
@@ -41,6 +40,9 @@ export const ui: Localized<{
     zoomIn: string;
     zoomOut: string;
     reset: string;
+    day: string;
+    night: string;
+    canvas: string;
   };
 }> = {
   en: {
@@ -49,7 +51,6 @@ export const ui: Localized<{
       'Jingbo Wen (Tony) builds and studies infrastructure for large language models: inference serving, speculative decoding, distributed training, and compute allocation.',
     skip: 'Skip to content',
     navLabel: 'Sections',
-    themeToggle: 'Toggle colour theme',
     sections: {
       research: 'Research',
       experience: 'Experience',
@@ -72,6 +73,9 @@ export const ui: Localized<{
       zoomIn: 'Zoom in',
       zoomOut: 'Zoom out',
       reset: 'Reset view',
+      day: 'Show the day side',
+      night: 'Show the night lights',
+      canvas: 'Globe of the places above. Drag, or use the arrow keys, to turn it; + and − zoom.',
     },
   },
   zh: {
@@ -80,7 +84,6 @@ export const ui: Localized<{
       'Jingbo Wen (Tony)：研究并构建大语言模型的基础设施，方向包括推理服务、投机解码、分布式训练与算力分配。',
     skip: '跳到正文',
     navLabel: '页面导航',
-    themeToggle: '切换深色 / 浅色',
     sections: {
       research: '研究',
       experience: '经历',
@@ -103,6 +106,9 @@ export const ui: Localized<{
       zoomIn: '放大',
       zoomOut: '缩小',
       reset: '回到初始视角',
+      day: '显示白天',
+      night: '显示夜景',
+      canvas: '标出上面这些地点的地球。拖动或用方向键旋转，+ 和 − 缩放。',
     },
   },
 };

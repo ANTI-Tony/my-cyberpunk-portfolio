@@ -9,7 +9,7 @@ export interface Place {
   name: Localized;
   country: Localized;
   period?: Localized;
-  note: Localized;
+  note?: Localized;
 }
 
 export const places: Place[] = [
@@ -35,6 +35,13 @@ export const places: Place[] = [
       en: 'Home base in China.',
       zh: '在国内时常驻的城市。',
     },
+  },
+  {
+    id: 'shenyang',
+    lat: 41.8057,
+    lon: 123.4315,
+    name: { en: 'Shenyang', zh: '沈阳' },
+    country: { en: 'China', zh: '中国' },
   },
 ];
 

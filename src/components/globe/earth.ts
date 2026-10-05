@@ -36,8 +36,6 @@ export interface EarthOptions {
   reducedMotion: boolean;
   textureSize: '2k' | '4k';
   onFrame: (points: ScreenPoint[]) => void;
-  // Fires when the globe (with its halo) starts or stops overflowing the canvas.
-  onOverflow: (overflowing: boolean) => void;
   onContextLost: () => void;
 }
 
@@ -48,8 +46,9 @@ export interface Earth {
   setNight(night: boolean): void;
   setActive(active: boolean): void;
   flyTo(point: LatLon): void;
-  // Leaves the focused place: zooms back out and lets the globe spin again.
+  // Leaves the focused place and zooms back out, keeping the visitor's orientation.
   release(): void;
+  // Back to the starting view; the globe resumes its slow spin.
   home(): void;
   zoomBy(factor: number): void;
   dispose(): void;
@@ -73,16 +72,14 @@ const FOCUS_DIST = 3.2;
 const MIN_DIST = 1.8;
 const MAX_DIST = 6.5;
 const MAX_PITCH = 80 * DEG;
-const SPIN = 0.05; // auto-rotation, rad/s
-const IDLE_MS = 3000; // pause after an interaction before auto-rotation resumes
+const SPIN = 0.05; // idle rotation, rad/s
+const KEY_STEP = 12 * DEG; // rotation per arrow-key press
 const HALO_RADIUS = 1.12;
-// Closer than this, the halo's projected radius exceeds half the canvas's shorter side.
-const OVERFLOW_DIST = HALO_RADIUS / Math.sin(Math.atan(Math.tan((FOV * DEG) / 2)));
 const LIGHT = new Vector3(-0.5, 0.55, 0.67).normalize();
 
-// Linear-space colours for the two themes; the light theme shows the day side, the dark theme city lights.
+// Linear-space colours for the day side and for the city lights at night.
 const THEMES = {
-  day: { rim: new Vector3(0.3, 0.52, 1), halo: new Vector3(0.36, 0.6, 1), haloStrength: 0.6 },
+  day: { rim: new Vector3(0.24, 0.46, 1), halo: new Vector3(0.24, 0.48, 1), haloStrength: 0.55 },
   night: { rim: new Vector3(0.1, 0.2, 0.62), halo: new Vector3(0.16, 0.32, 0.95), haloStrength: 0.6 },
 };
 
@@ -115,7 +112,7 @@ const earthFragment = /* glsl */ `
 
     vec3 day = texture2D(dayMap, vUv).rgb;
     float light = clamp(dot(n, lightDir) * 0.42 + 0.74, 0.0, 1.2);
-    vec3 dayColor = mix(day * light, rimColor, rim * 0.6);
+    vec3 dayColor = mix(day * light, rimColor, rim * 0.5);
 
     vec3 lights = texture2D(nightMap, vUv).rgb;
     vec3 nightColor = lights * 1.15 + rimColor * rim * 0.5;
@@ -134,7 +131,7 @@ const haloFragment = /* glsl */ `
   varying vec3 vView;
   void main() {
     float d = clamp(-dot(normalize(vNormal), normalize(vView)) / limb, 0.0, 1.0);
-    gl_FragColor = vec4(color, pow(d, 2.4) * strength);
+    gl_FragColor = vec4(color, pow(d, 3.2) * strength);
     #include <colorspace_fragment>
   }
 `;
@@ -197,10 +194,11 @@ export function createEarth(options: EarthOptions): Earth {
   let lastMove = 0;
   let flight: Flight | null = null;
   let focused = false;
-  let overflowing = false;
+  // The globe spins slowly on its own until the visitor first turns, zooms or opens a place;
+  // from then on it stays where they leave it.
+  let handsOn = false;
   let spin = 0; // ramps auto-rotation up from rest
   let nightTarget = earthUniforms.night.value;
-  let lastInteraction = -Infinity;
   let width = 0;
   let height = 0;
   let loaded = false;
@@ -253,10 +251,6 @@ export function createEarth(options: EarthOptions): Earth {
     camera.position.set(0, 0, view.dist);
     renderer.render(scene, camera);
     project();
-    if (view.dist < OVERFLOW_DIST !== overflowing) {
-      overflowing = !overflowing;
-      options.onOverflow(overflowing);
-    }
   }
 
   function requestFrame() {
@@ -287,10 +281,9 @@ export function createEarth(options: EarthOptions): Earth {
       moving = true;
     }
 
-    // Auto-rotation: resumes a few seconds after the last interaction, unless a place is open.
-    if (!focused && !reducedMotion) {
+    if (!handsOn && !focused && !reducedMotion) {
       moving = true;
-      if (!flight && pointers.size === 0 && now - lastInteraction > IDLE_MS) {
+      if (!flight) {
         spin = Math.min(1, spin + dt / 1.5);
         view.yaw += SPIN * spin * dt;
       } else {
@@ -327,11 +320,12 @@ export function createEarth(options: EarthOptions): Earth {
     requestFrame();
   }
 
-  const interacted = () => {
-    lastInteraction = performance.now();
+  const takeOver = () => {
+    handsOn = true;
+    spin = 0;
   };
 
-  // ---------- Input: drag to rotate, pinch or ctrl/⌘ + wheel to zoom ----------
+  // ---------- Input: drag or arrow keys to rotate, pinch, ctrl/⌘ + wheel or +/− to zoom ----------
 
   const span = () => {
     const [a, b] = Array.from(pointers.values());
@@ -353,7 +347,7 @@ export function createEarth(options: EarthOptions): Earth {
     flight = null;
     velocity.yaw = velocity.pitch = 0;
     lastMove = e.timeStamp;
-    interacted();
+    takeOver();
     requestFrame();
   }
 
@@ -375,7 +369,6 @@ export function createEarth(options: EarthOptions): Earth {
       velocity.yaw = clamp(0.5 * velocity.yaw + (0.5 * dx * k) / dt, -4, 4);
       velocity.pitch = clamp(0.5 * velocity.pitch + (0.5 * dy * k) / dt, -4, 4);
     }
-    interacted();
     requestFrame();
   }
 
@@ -384,7 +377,6 @@ export function createEarth(options: EarthOptions): Earth {
     if (pointers.size < 2) pinch = null;
     // No fling when the pointer was held still before release, or when the browser took over the gesture.
     if (e.type === 'pointercancel' || e.timeStamp - lastMove > 90) velocity.yaw = velocity.pitch = 0;
-    interacted();
     requestFrame();
   }
 
@@ -393,8 +385,27 @@ export function createEarth(options: EarthOptions): Earth {
     e.preventDefault();
     flight = null;
     view.dist = clamp(view.dist * Math.exp(e.deltaY * 0.01), MIN_DIST, MAX_DIST);
-    interacted();
+    takeOver();
     requestFrame();
+  }
+
+  // Arrow keys pan the view the way they do on a map: left shows what lies to the west.
+  function onKeyDown(e: KeyboardEvent) {
+    if (e.altKey || e.ctrlKey || e.metaKey) return;
+    const moves: Record<string, Partial<View>> = {
+      ArrowLeft: { yaw: view.yaw + KEY_STEP },
+      ArrowRight: { yaw: view.yaw - KEY_STEP },
+      ArrowUp: { pitch: view.pitch + KEY_STEP },
+      ArrowDown: { pitch: view.pitch - KEY_STEP },
+      '+': { dist: clamp(view.dist * 0.8, MIN_DIST, MAX_DIST) },
+      '=': { dist: clamp(view.dist * 0.8, MIN_DIST, MAX_DIST) },
+      '-': { dist: clamp(view.dist * 1.25, MIN_DIST, MAX_DIST) },
+    };
+    const move = moves[e.key];
+    if (!move) return;
+    e.preventDefault();
+    takeOver();
+    fly({ ...view, ...move }, 260);
   }
 
   function onContextLost(e: Event) {
@@ -407,6 +418,7 @@ export function createEarth(options: EarthOptions): Earth {
   canvas.addEventListener('pointerup', onPointerUp);
   canvas.addEventListener('pointercancel', onPointerUp);
   canvas.addEventListener('wheel', onWheel, { passive: false });
+  canvas.addEventListener('keydown', onKeyDown);
   canvas.addEventListener('webglcontextlost', onContextLost);
 
   return {
@@ -440,23 +452,23 @@ export function createEarth(options: EarthOptions): Earth {
 
     flyTo({ lat, lon }) {
       focused = true;
+      takeOver();
       fly({ yaw: yawFor(lon), pitch: lat * DEG, dist: FOCUS_DIST });
     },
 
     release() {
       focused = false;
-      interacted();
       fly({ yaw: view.yaw, pitch: view.pitch * 0.5, dist: HOME.dist }, 900);
     },
 
     home() {
       focused = false;
-      interacted();
+      handsOn = false;
       fly({ yaw: yawFor(HOME.lon), pitch: HOME.lat * DEG, dist: HOME.dist });
     },
 
     zoomBy(factor) {
-      interacted();
+      takeOver();
       fly({ ...view, dist: clamp(view.dist * factor, MIN_DIST, MAX_DIST) }, 350);
     },
 
@@ -468,6 +480,7 @@ export function createEarth(options: EarthOptions): Earth {
       canvas.removeEventListener('pointerup', onPointerUp);
       canvas.removeEventListener('pointercancel', onPointerUp);
       canvas.removeEventListener('wheel', onWheel);
+      canvas.removeEventListener('keydown', onKeyDown);
       canvas.removeEventListener('webglcontextlost', onContextLost);
       textures.forEach((t) => t.dispose());
       earthGeometry.dispose();

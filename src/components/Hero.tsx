@@ -89,7 +89,7 @@ export default function Hero({ lang, head, intro }: { lang: Lang; head: ReactNod
                 {place.name[lang]}
               </h2>
               <p className="place-coords">{formatCoordinates(place)}</p>
-              <p className="place-note">{place.note[lang]}</p>
+              {place.note && <p className="place-note">{place.note[lang]}</p>}
             </article>
           ) : (
             <>
@@ -125,7 +125,14 @@ export default function Hero({ lang, head, intro }: { lang: Lang; head: ReactNod
             selected={selected}
             onSelect={setSelected}
             onClose={close}
-            labels={{ zoomIn: t.zoomIn, zoomOut: t.zoomOut, reset: t.reset }}
+            labels={{
+              zoomIn: t.zoomIn,
+              zoomOut: t.zoomOut,
+              reset: t.reset,
+              day: t.day,
+              night: t.night,
+              canvas: t.canvas,
+            }}
           />
         </div>
       </div>

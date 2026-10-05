@@ -1,6 +1,6 @@
 # Jingbo Wen (Tony) — 个人主页
 
-学术风格的个人主页，基于 Next.js（App Router）与 TypeScript，部署在 Vercel。
+星空背景的个人主页：首页是一个可以拖动旋转的 3D 地球，标出去过的地方，点开即飞过去。基于 Next.js（App Router）、TypeScript 与 three.js，部署在 Vercel。
 
 - English：<https://jtw-sable.vercel.app>
 - 中文：<https://jtw-sable.vercel.app/zh>
@@ -33,4 +33,5 @@ src/
 ├── components/          # 页面与交互组件（globe/ 是 three.js 地球）
 └── content/             # 站点内容：profile.ts 文字，places.ts 地点
 public/earth/            # NASA 地球影像（白天 / 夜景）与加载时的静态图
+public/space/            # 星空背景贴图
 ```
